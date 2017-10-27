@@ -42,11 +42,12 @@
 #define KANJI 6
 #define KUTOUTEN 7
 #define DASH 0xa1bc
-#define other 0
+#define OTHER 0
 
 
-int check_character(char *character,int n){
+int check_character(char *character){
     /*文字列を受け取り、*/
+  int moji;
     moji = atoi(character);
     if (moji >= HIRAGANA_S && moji <= HIRAGANA_E){
         return HIRAGANA;
@@ -78,16 +79,15 @@ int check_character(char *character,int n){
 
 int main (void){
     int c,n;
-    unsigned char string[];
     char *euc_ch;
     int check[2];
     
     while((c = getchar())!= EOF){ /*一文字ずつ読み込む、文章が終わるまで*/
         if(c >=128){
-            euc_ch = c;
+            euc_ch[0] = c;
             if((c = getchar())!= EOF){
-                euc_ch + 1 = c; /*EUC2byte文字*/
-                euc_ch + 2 = '\0'; 
+                euc_ch[1] = c; /*EUC2byte文字*/
+                euc_ch[2] = '\0'; 
             }else{
                 printf("input text is not encoded EUC code.\n");
                 
@@ -97,10 +97,9 @@ int main (void){
             continue;
         }
         else{
-            euc_ch = c;
-            euc_ch + 1 = '\0';
+            euc_ch[0] = c;
+            euc_ch[1] = '\0';
         }
-
         /*読み込んだ文字種のチェック*/
         check[1] = check_character(euc_ch);
 
@@ -113,5 +112,6 @@ int main (void){
             printf("\n%s",euc_ch);
             check[0] = check[1];
         }
+    }
     return 0;
 }

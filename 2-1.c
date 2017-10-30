@@ -43,68 +43,70 @@
 #define KUTOUTEN 7
 #define DASH 0xa1bc
 #define OTHER 0
+char euc_ch[3];
+int check[2];
 
+int check_character(int c){
+    int ans;
+    if(c >=128){
+        euc_ch[0] = c;
+        if((c = getchar())!= EOF){
+            euc_ch[1] = c; /*EUC2byte文字*/
+            euc_ch[2] = '\0'; 
+        }else{
+            printf("input text is not encoded EUC code.\n");
+            }
+        }
 
-int check_character(char *character){
-    /*文字列を受け取り、*/
-  int moji;
-  printf("This function gets %s.\n",character);
-    moji = atoi(character);
-    if (moji >= HIRAGANA_S && moji <= HIRAGANA_E){
-        return HIRAGANA;
+    else if(c == '\n'){
+        continue;
     }
-    else if(moji >= KATAKANA_S && moji <= KATAKANA_E){
-        return KATAKANA;
+    else{
+        euc_ch[0] = c;
+        euc_ch[1] = '\0';
+    }
+
+
+       
+    }
+    if (c >= HIRAGANA_S && c <= HIRAGANA_E){
+        ans =  HIRAGANA;
+    }
+    else if(c >= KATAKANA_S && c <= KATAKANA_E){
+        ans =  KATAKANA;
     } 
-    else if(moji >= ASCIITYPE_S && moji <= ASCIITYPE_E){
-        return ASCIITYPE;
+    else if(c >= ASCIITYPE_S && c <= ASCIITYPE_E){
+        if(c >= NUMBER_S && c <= NUMBER_E){
+            ans =  NUMBER;
+        }
+        else{
+        ans =  ASCIITYPE;
+        }
+
     } 
-    else if(moji >= NUMBER_S && moji <= NUMBER_E){
-        return NUMBER;
+    else if(c >= TWOBYTECODE_S && c <= TWOBYTECODE_E){
+        ans =  TWOBYTECODE;
     } 
-    else if(moji >= TWOBYTECODE_S && moji <= TWOBYTECODE_E){
-        return TWOBYTECODE;
+    else if(c >= KANJI_S && c <= KANJI_E){
+        ans =  KANJI;
     } 
-    else if(moji >= KANJI_S && moji <= KANJI_E){
-        return KANJI;
-    } 
-    else if(moji >= KUTOUTEN_S && moji <= KUTOUTEN_E){
-        return KUTOUTEN;
+    else if(c >= KUTOUTEN_S && c <= KUTOUTEN_E){
+        ans =  KUTOUTEN;
     } 
     else{
-        return OTHER;
+        ans =  OTHER;
     }
-
+    return ans;
 }
 
 
 int main (void){
-    int c,n;
-    char *euc_ch;
-    int check[2];
-    
-    while((c = getchar())!= EOF){ /*一文字ずつ読み込む、文章が終わるまで*/
-        if(c >=128){
-            euc_ch[0] = c;
-            if((c = getchar())!= EOF){
-                euc_ch[1] = c; /*EUC2byte文字*/
-                euc_ch[2] = '\0'; 
-            }else{
-                printf("input text is not encoded EUC code.\n");
-                
-            }
-        }
-        else if(c == '\n'){
-            continue;
-        }
-        else{
-            euc_ch[0] = c;
-            euc_ch[1] = '\0';
-        }
-        /*読み込んだ文字種のチェック*/
-        check[1] = check_character(euc_ch);
-
-
+    int c;
+    check[0] = 0; /*初期化*/
+    while((c = getchar())!= EOF){
+        
+        check_character(c);
+        
         /*隣り合う文字種が同じかどうか*/
         if(check[0] == check[1]){
             printf("%s",euc_ch);

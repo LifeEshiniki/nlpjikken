@@ -57,18 +57,11 @@ int check_character(int c){
             printf("input text is not encoded EUC code.\n");
             }
         }
-
-    else if(c == '\n'){
-        continue;
-    }
     else{
         euc_ch[0] = c;
         euc_ch[1] = '\0';
     }
 
-
-       
-    }
     if (c >= HIRAGANA_S && c <= HIRAGANA_E){
         ans =  HIRAGANA;
     }
@@ -96,6 +89,7 @@ int check_character(int c){
     else{
         ans =  OTHER;
     }
+    printf("%d",ans);
     return ans;
 }
 
@@ -105,7 +99,7 @@ int main (void){
     check[0] = 0; /*初期化*/
     while((c = getchar())!= EOF){
         
-        check_character(c);
+        check[1] = check_character(c);
         
         /*隣り合う文字種が同じかどうか*/
         if(check[0] == check[1]){

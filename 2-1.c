@@ -48,6 +48,7 @@
 int check_character(char *character){
     /*文字列を受け取り、*/
   int moji;
+  printf("%s\n",character);
     moji = atoi(character);
     if (moji >= HIRAGANA_S && moji <= HIRAGANA_E){
         return HIRAGANA;
